@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .palette {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .color-box {
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .color-box:hover {
+            transform: scale(1.1);
+        }
+        .copy-alert {
+            display: none;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Color Palette Generator</h1>
+    <button onclick="generatePalette()">Generate Palette</button>
+    <div class="palette" id="palette"></div>
+    <div class="copy-alert" id="copyAlert">Color code copied!</div>
+
+    <script>
+        function generateRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function generatePalette() {
+            const paletteContainer = document.getElementById('palette');
+            paletteContainer.innerHTML = ''; // Clear existing palette
+
+            for (let i = 0; i < 5; i++) {
+                const color = generateRandomColor();
+                const colorBox = document.createElement('div');
+                colorBox.classList.add('color-box');
+                colorBox.style.backgroundColor = color;
+                colorBox.innerHTML = color;
+                colorBox.setAttribute('data-color', color);
+
+                colorBox.addEventListener('click', function() {
+                    copyToClipboard(color);
+                });
+
+                paletteContainer.appendChild(colorBox);
+            }
+        }
+
+        function copyToClipboard(color) {
+            const tempInput = document.createElement('input');
+            tempInput.value = color;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showCopyAlert();
+        }
+
+        function showCopyAlert() {
+            const alertBox = document.getElementById('copyAlert');
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 1500);
+        }
+    </script>
+
+</body>
+</html>
